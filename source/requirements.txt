@@ -1,0 +1,8 @@
+sphinx-rtd-theme
+sphinx_rtd_dark_mode
+sphinx_copybutton
+sphinxcontrib.httpdomain
+sphinxcontrib.plantuml
+graphviz
+sphinxcontrib.openapi
+sphinxcontrib.redoc

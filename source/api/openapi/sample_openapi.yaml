@@ -1,0 +1,195 @@
+openapi: "3.0.2"
+info:
+  title: REST API service
+  version: "1.0.0"
+servers: 
+  - url: "https://path.local/v2/get"
+tags:
+  - name: "sample"
+    x-displayName: Модуль сервисов sample
+    description: Сервисы справочников 
+paths:
+  /getMethod:
+    get:
+      servers:
+        - url: "https://path.local/v2/get"
+      summary: Справочник 
+      description: >-
+          Возвращает данные справочника 
+      tags:
+        - sample
+      security:
+        - oauth2:
+          - read
+      responses:
+        '200':
+          description: Выполнено
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/getMethod"
+              examples:
+                sample:
+                  value:
+                    - 
+                      id: 41
+                      text: 123
+        '400':
+          description: Ошибка
+        '401':
+          description: Ошибка авторизации
+          $ref: "#/components/responses/Unauthorized"
+  /project:
+    get:
+      servers:
+        - url: "https://path.local/v2/get"
+      summary: Справочник 1
+      description: >-
+          Возвращает данные справочника 1
+      tags:
+        - sample
+      security:
+        - oauth2:
+          - read
+      responses:
+        '200':
+          description: Выполнено
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/project"
+              examples:
+                sample:
+                  value:
+                    - 
+                      id: 41
+                      text: 123
+        '400':
+          description: Ошибка
+        '401':
+          description: Ошибка авторизации
+          $ref: "#/components/responses/Unauthorized"
+  /system:
+    get:
+      servers:
+        - url: "https://path.local/v2/get"
+      summary: Справочник 2
+      description: >-
+          Возвращает данные справочника 2
+      tags:
+        - sample
+      security:
+        - oauth2:
+          - read
+      responses:
+        '200':
+          description: Выполнено
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/system"
+              examples:
+                sample:
+                  value:
+                    - 
+                      id: 41
+                      text: 123
+        '400':
+          description: Ошибка
+        '401':
+          description: Ошибка авторизации
+          $ref: "#/components/responses/Unauthorized"
+components:
+  securitySchemes:
+    oAuth:
+      type: oauth2
+      description: This API uses OAuth 2 with the implicit grant flow. [More info](https://api.example.com/docs/auth)
+      flows:
+        password:
+          tokenUrl: https://oauth.path.local/token
+          scopes: {}
+  schemas:
+    getMethod:
+      type: array
+      items:
+        anyOf:
+        - $ref: "#/components/schemas/getMethodRow"
+    getMethodRow:
+      type: object
+      description: Данные по 2
+      properties:
+        id:
+          type: number
+          description: Идентификатор 2
+          example: 41
+        text:
+          type: string
+          maxLength: 1
+          description: Наименование
+          example: "123"
+    project:
+      type: array
+      items:
+        anyOf:
+          - $ref: "#/components/schemas/projectRow"
+    projectRow:
+      type: object
+      description: Данные по проектам
+      properties:
+        id:
+          type: number
+          description: Идентификатор проекта
+          example: 201
+        text:
+          type: string
+          maxLength: 128
+          description: Наименование проекта (короткое наименование)
+          example: "123"
+        group:
+          type: string
+          maxLength: 250
+          description: Наименование группы проекта (полное наименование)
+          example: "123"
+    system:
+      type: array
+      items:
+        anyOf:
+        - $ref: "#/components/schemas/systemRow"
+    systemRow:
+      type: object
+      description: Данные по системам
+      properties:
+        id:
+          type: number
+          description: Идентификатор системы
+          example: 222
+        text:
+          type: string
+          maxLength: 100
+          description: Наименование системы
+          example: "123"
+  responses:
+    Unauthorized:
+      description: Ошибка авторизации
+      content:
+        application/json:
+          schema:
+            properties:
+              Error:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+
+
