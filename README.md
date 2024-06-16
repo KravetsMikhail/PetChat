@@ -78,10 +78,11 @@
 
    ссылка: <https://graphviz.org>
 
-8. Установка модуля plantUML
+8. Установка модуля plantUML + Pillow (для поддержки параметра scale)
 
    ```bash
    pip install sphinxcontrib-plantuml
+   pip install --upgrade Pillow
    ```
 
    ссылка: <https://github.com/sphinx-contrib/plantuml>

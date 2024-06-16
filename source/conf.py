@@ -14,7 +14,7 @@ copyright = '2024 г'
 author = 'Кравец М.А.'
 version = '0.1.0'
 release = '0.1.0'
-plantuml = 'java -Djava.awt.headless=true -jar /usr/bin/plantuml.jar'
+plantuml = 'java -Djava.awt.headless=true -jar ../../../plantuml-mit-1.2024.5.jar'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
@@ -50,3 +50,4 @@ html_output_encoding = 'utf-8'
 
 graphviz_output_format = 'svg'
 html_show_sourcelink = False
+
