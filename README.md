@@ -122,3 +122,50 @@
    ```
 
 смотреть тут: <http://127.0.0.1:8000>
+
+## Публикация на сервере "Read the Docs"
+
+Для отображения диаграмм plantUML необходимо создать файл - scripts/pre_install.sh
+
+   ```bash
+   #!/bin/bash
+
+   # Stop and exit on error
+   set -euox pipefail
+
+   # Check for required tools
+   java -version
+   dot -V
+
+   # This folder is on PATH and does not require sudo
+   # Download latest plantuml.jar from github
+   curl -o ${READTHEDOCS_VIRTUALENV_PATH}/bin/plantuml.jar -L https://github.com/plantuml/plantuml/releases/download/v1.2024.3/plantuml-1.2024.3.jar
+   # Create an executable script for plantuml
+   printf '#!/bin/bash\nexec java -Djava.awt.headless=true -jar ${READTHEDOCS_VIRTUALENV_PATH}/bin/plantuml.jar "$@"' > ${READTHEDOCS_VIRTUALENV_PATH}/bin/plantuml
+   chmod +x ${READTHEDOCS_VIRTUALENV_PATH}/bin/plantuml
+
+   # Check plantuml version
+   plantuml -version
+   ```
+В файл .readthedocs.yaml добавить секцию "jobs":
+
+   ```yaml
+   version: 2
+
+   build:
+   os: ubuntu-22.04
+   tools:
+      python: "3.12"
+
+   apt_packages:
+      - default-jre
+      - graphviz
+
+   jobs:
+      pre_install:
+         - bash ./scripts/pre_install.sh
+
+   ```
+
+ссылка на статью: https://stackoverflow.com/questions/77869766/how-do-i-specify-the-plantuml-version-with-readthedocs
+
