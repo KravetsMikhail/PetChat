@@ -7,6 +7,10 @@
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
 !define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/material
 
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+!include $ICONURL/devicons2/apachekafka_original_wordmark.puml
+
 !include MATERIAL/vpn_key.puml
 !include MATERIAL/insert_drive_file.puml
 !include FONTAWESOME/users.puml
@@ -18,25 +22,43 @@ LAYOUT_WITH_LEGEND()
 Person(user, "Пользователи", "", $sprite="users")
 Container(loadbalanser1, "Балансировщик", "Балансировщик нагрузки", "", $sprite="braille")
 
+System_Boundary(geoloc, "Геораспределенная инфраструктура") {    
+    Container(ws, "WebScoket сервер", "Поддерживает соединение с активными (онлайн) пользователями", "")
+    ContainerDb(wscash, "Redis", "", "", $sprite="redis")
+    
+}
+
+Container(loadbalanser2, "Балансировщик", "Балансировщик нагрузки", "", $sprite="braille")
+
 System_Boundary(chat, "Инфраструктура чата") {
+    Container(apigate1, "API Gateway", "", "API-Шлюз")
     Container(wsmanager, "WebSocket manager", "", "Управление сопоставлением содинений и пользователей")
     ContainerDb(wsmanagerdb, "Redis", "", "", $sprite="redis")
+    Container(message, "Message service", "", "Служба сообщений")
+    ContainerQueue(kafka, "Queue", "", "", $sprite="apachekafka_original_wordmark")
+
+    ' Enterprise_Boundary(system, "Инфраструктурные сервисы") {
+    '     Container_Ext(auth, "Сервер аутентификации", "SSO", $sprite = "vpn_key")
+    '     Container_Ext(blob, "Файловый сервер", "SeaweedFS", $sprite = "insert_drive_file")
+    ' }
 }
 
-Container_Boundary(api, "API Application") {
+Container_Ext(auth, "Сервер аутентификации", "SSO", $sprite = "vpn_key")
+' Container_Ext(blob, "Файловый сервер", "SeaweedFS", $sprite = "insert_drive_file")
 
-}
+' Container_Boundary(api, "API Application") {
 
-Enterprise_Boundary(system, "Инфраструктурные сервисы") {
-    Container_Ext(auth, "Сервер аутентификации", "SSO", $sprite = "vpn_key")
-    Container_Ext(blob, "Файловый сервер", "SeaweedFS", $sprite = "insert_drive_file")
-}
-
+' }
 
 Rel(user, loadbalanser1, "", "")
+BiRel(loadbalanser1, ws, "", "")
+Rel_L(ws, wscash, "", "")
+BiRel(apigate1, wsmanager, "", "")
+BiRel(ws, loadbalanser2, "", "")
+BiRel(loadbalanser2, apigate1, "", "")
 BiRel(wsmanager, wsmanagerdb, "", "")
-' Rel_L(user2, spa, "Uses", "https")
-' Rel(spa, api, "Uses", "https")
-' Rel_R(api, db, "Reads/Writes")
+Rel_R(auth, apigate1, "", "")
+BiRel(apigate1, message, "", "")
+Rel(message, kafka, "", "")
 
 @endumlP
