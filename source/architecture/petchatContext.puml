@@ -5,23 +5,36 @@
 
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
-!include DEVICONS/angular.puml
-!include DEVICONS/java.puml
-!include DEVICONS/msql_server.puml
+!define MATERIAL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/material
+
+!include MATERIAL/vpn_key.puml
+!include MATERIAL/insert_drive_file.puml
 !include FONTAWESOME/users.puml
 !include FONTAWESOME/braille.puml
+!include DEVICONS/redis.puml
 
 LAYOUT_WITH_LEGEND()
 
 Person(user, "Пользователи", "", $sprite="users")
-' Boundary(loadbalanser1, "Балансировщик нагрузки")
 Container(loadbalanser1, "Балансировщик", "Балансировщик нагрузки", "", $sprite="braille")
-' Container(spa, "SPA", "angular", "The main interface that the customer interacts with", $sprite="angular")
-' Container(api, "API", "java", "Handles all business logic", $sprite="java")
-' ContainerDb(db, "Database", "Microsoft SQL", "Holds product, order and invoice information", $sprite="msql_server")
-' Container(user2, "Продавец", "Продавец воздуха", $sprite="user")
+
+System_Boundary(chat, "Инфраструктура чата") {
+    Container(wsmanager, "WebSocket manager", "", "Управление сопоставлением содинений и пользователей")
+    ContainerDb(wsmanagerdb, "Redis", "", "", $sprite="redis")
+}
+
+Container_Boundary(api, "API Application") {
+
+}
+
+Enterprise_Boundary(system, "Инфраструктурные сервисы") {
+    Container_Ext(auth, "Сервер аутентификации", "SSO", $sprite = "vpn_key")
+    Container_Ext(blob, "Файловый сервер", "SeaweedFS", $sprite = "insert_drive_file")
+}
+
 
 Rel(user, loadbalanser1, "", "")
+BiRel(wsmanager, wsmanagerdb, "", "")
 ' Rel_L(user2, spa, "Uses", "https")
 ' Rel(spa, api, "Uses", "https")
 ' Rel_R(api, db, "Reads/Writes")

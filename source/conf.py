@@ -15,7 +15,7 @@ author = 'Кравец М.А.'
 version = '0.1.0'
 release = '0.1.0'
 # plantuml = 'java -Djava.awt.headless=true -jar ../../../plantuml-mit-1.2024.5.jar'
-plantuml = 'java -Djava.awt.headless=true -jar /home/docs/checkouts/readthedocs.org/user_builds/petchat/envs/latest/bin/plantuml.jar'
+# plantuml = 'java -Djava.awt.headless=true -jar /home/docs/checkouts/readthedocs.org/user_builds/petchat/envs/latest/bin/plantuml.jar'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
