@@ -16,6 +16,8 @@
 !include FONTAWESOME/users.puml
 !include FONTAWESOME/braille.puml
 !include DEVICONS/redis.puml
+!include DEVICONS/postgresql.puml
+!include MATERIAL/notifications_active.puml
 
 LAYOUT_WITH_LEGEND()
 
@@ -31,25 +33,35 @@ System_Boundary(geoloc, "Геораспределенная инфраструк
 Container(loadbalanser2, "Балансировщик", "Балансировщик нагрузки", "", $sprite="braille")
 
 System_Boundary(chat, "Инфраструктура чата") {
-    Container(apigate1, "API Gateway", "", "API-Шлюз")
+    Container(apigate1, "API Gateway", "BFF", "API-Шлюзы")
     Container(wsmanager, "WebSocket manager", "", "Управление сопоставлением содинений и пользователей")
-    ContainerDb(wsmanagerdb, "Redis", "", "", $sprite="redis")
+    ContainerDb(wsmanagerdb, "Redis кластер", "", "", $sprite="redis")
     Container(message, "Message service", "", "Служба сообщений")
-    ContainerQueue(kafka, "Queue", "", "", $sprite="apachekafka_original_wordmark")
-
-    ' Enterprise_Boundary(system, "Инфраструктурные сервисы") {
-    '     Container_Ext(auth, "Сервер аутентификации", "SSO", $sprite = "vpn_key")
-    '     Container_Ext(blob, "Файловый сервер", "SeaweedFS", $sprite = "insert_drive_file")
-    ' }
+    ContainerQueue(kafka, "Брокер сообщений", "", "", $sprite="apachekafka_original_wordmark")
+    ContainerDb(colddb, "Холодное хранение сообщений", "", "", $sprite="postgresql")
+    ContainerDb(hotdb, "Горячее хранение сообщений", "", "", $sprite="redis")
+    Container(notification, "Notification service", "", "Служба оповещений")
+    Container(status, "Status service", "", "Служба статусов")
+    Container(profileuser, "User service", "", "Сервис профилей")
+    Container(asset, "Asset service", "", "Мультимедиа сервис")
+    Container(blob, "BLOB service", "SeaweedFS", "Мультимедиа сервис")
+    ContainerQueue(kafka2, "Брокер сообщений", "", "", $sprite="apachekafka_original_wordmark")
+    ContainerDb(notificationDb, "Кеш Redis", "", "", $sprite="redis")
+    ContainerDb(statusDb, "PostgreSQL", "Кластер БД", "", $sprite="postgresql")
+    ContainerDb(usersDb, "PostgreSQL", "Кластер БД", "", $sprite="postgresql")
 }
 
 Container_Ext(auth, "Сервер аутентификации", "SSO", $sprite = "vpn_key")
-' Container_Ext(blob, "Файловый сервер", "SeaweedFS", $sprite = "insert_drive_file")
+Container_Ext(cdn, "CDN", "", $sprite = "insert_drive_file")
+Container_Ext(push, "Push-notification sevices", "GCM, APNS", $sprite = "notifications_active")
+
+
 
 ' Container_Boundary(api, "API Application") {
 
 ' }
 
+Rel_U(chat, push, "", "")
 Rel(user, loadbalanser1, "", "")
 BiRel(loadbalanser1, ws, "", "")
 Rel_L(ws, wscash, "", "")
@@ -60,5 +72,17 @@ BiRel(wsmanager, wsmanagerdb, "", "")
 Rel_R(auth, apigate1, "", "")
 BiRel(apigate1, message, "", "")
 Rel(message, kafka, "", "")
+BiRel(kafka, colddb, "", "")
+BiRel(kafka, hotdb, "", "")
+BiRel_U(notification, apigate1, "", "")
+BiRel_U(status, apigate1, "", "")
+BiRel_U(profileuser, apigate1, "", "")
+BiRel_U(asset, apigate1, "", "")
+BiRel_L(asset, cdn, "", "")
+BiRel(asset, blob, "", "")
+Rel(notification, kafka2, "", "")
+BiRel_D(kafka2, notificationDb, "", "")
+Rel(status, statusDb, "", "")
+Rel(profileuser, usersDb, "", "")
 
 @endumlP
