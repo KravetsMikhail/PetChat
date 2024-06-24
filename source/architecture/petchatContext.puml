@@ -32,7 +32,7 @@ System_Boundary(geoloc, "Геораспределенная инфраструк
 
 Container(loadbalanser2, "Балансировщик", "Балансировщик нагрузки", "", $sprite="braille")
 
-System_Boundary(chat, "Инфраструктура чата") {
+System_Boundary(chat, "Инфраструктура мессенджера") {
     Container(apigate1, "API Gateway", "BFF", "API-Шлюзы")
     Container(wsmanager, "WebSocket manager", "", "Управление содинениями")
     ' ContainerDb(wsmanagerdb, "Redis кластер", "", "", $sprite="redis")
@@ -56,36 +56,32 @@ Container_Ext(cdn, "CDN", "", $sprite = "insert_drive_file")
 Container_Ext(blob, "BLOB service", "SeaweedFS", "Мультимедиа сервис")
 Container_Ext(push, "Push-notification sevices", "GCM, APNS", $sprite = "notifications_active")
 
-
-
-' Container_Boundary(api, "API Application") {
-
-' }
-
-' Rel_U(chat, push, "", "")
 Rel(user, loadbalanser1, "", "")
 BiRel(loadbalanser1, ws, "", "")
-' Rel_L(ws, wscash, "", "")
 BiRel(apigate1, wsmanager, "", "")
 BiRel(ws, loadbalanser2, "", "")
 BiRel(loadbalanser2, apigate1, "", "")
-' BiRel(wsmanager, wsmanagerdb, "", "")
 Rel(auth, apigate1, "", "")
 BiRel(apigate1, message, "", "")
-' Rel(message, kafka, "", "")
-' BiRel(kafka, colddb, "", "")
-' BiRel(kafka, hotdb, "", "")
 BiRel_U(notification, apigate1, "", "")
-Rel(notification, push, "", "")
 BiRel_U(status, apigate1, "", "")
 BiRel_U(profileuser, apigate1, "", "")
 BiRel_U(asset, apigate1, "", "")
 BiRel_L(asset, cdn, "", "")
 BiRel(asset, blob, "", "")
 BiRel(user, auth, "", "")
+Rel(notification, push, "", "")
+
 ' Rel(notification, kafka2, "", "")
 ' BiRel_D(kafka2, notificationDb, "", "")
 ' Rel(status, statusDb, "", "")
 ' Rel(profileuser, usersDb, "", "")
+' Rel(message, kafka, "", "")
+' BiRel(kafka, colddb, "", "")
+' BiRel(kafka, hotdb, "", "")
+' Rel_U(chat, push, "", "")
+' Rel_L(ws, wscash, "", "")
+' BiRel(wsmanager, wsmanagerdb, "", "")
+
 
 @endumlP
