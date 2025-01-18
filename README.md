@@ -1,12 +1,16 @@
 # PetChat
 
+## Смотреть на readthedocs.io: <https://petchat.readthedocs.io/ru/latest/>
+
 ## Программная документация
 
 Используется **Sphinx**
 
 ссылка: <https://www.sphinx-doc.org/en/master/index.html>
 
-## Пакеты для инсталляции
+
+
+## Инсталляции
 
 1. Инициация проекта:
 
